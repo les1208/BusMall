@@ -1,0 +1,22 @@
+* {
+	box-sizing: border-box;
+	margin: 1px;
+	border: solid black 1px;
+	background-color: #beef00;
+}
+
+body {
+	background-color: #657a00;
+}
+
+h1{
+	font-size: 400%;
+	background-color: #ff0028;
+}
+
+img {
+	height: 400px;
+	width: 266px;
+	margin-left: auto;
+	margin-right: auto;
+}
