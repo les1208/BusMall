@@ -4,7 +4,10 @@ var imageOneEl = document.getElementById('picture1');
 var imageTwoEl = document.getElementById('picture2');
 var imageThreeEl = document.getElementById('picture3');
 var sectionEl =  document.getElementById('picture-container');
-//var totalClicks = 25;
+
+//total clicks var
+var totalClicks = 0;
+
 
 var allMallItems = [];
 
@@ -14,8 +17,6 @@ function BusMallItems(src, alt, title){
   this.title = title;
   this.clicked = 0;
   this.viewed = 0;
-  this.left= 0;
-  this.center =0;
 
   allMallItems.push(this);
 }
@@ -28,7 +29,7 @@ function imageGenerator(){
   var pic1 = random(allMallItems.length);
   var pic2= random(allMallItems.length);
   var pic3= random(allMallItems.length);
-  while(pic1 === pic2 === pic3){
+  while(pic1 === pic3 || pic2 === pic3 || pic1 === pic2 || pic1 === pic2 === pic3){
     pic2 = random(allMallItems.length);
     pic3= random(allMallItems.length);
   }
@@ -51,6 +52,7 @@ function imageGenerator(){
 }
 
 function handleClick(event) {
+  totalClicks++;
   var clickedItem = event.target.title;
   for(var i =0; i < allMallItems.length; i++){
     if(clickedItem === allMallItems[i].title){
