@@ -3,17 +3,20 @@
 var imageOneEl = document.getElementById('picture1');
 var imageTwoEl = document.getElementById('picture2');
 var imageThreeEl = document.getElementById('picture3');
-var sectionEl =  document.getElementById('picture-container');
+var sectionEl = document.getElementById('picture-container');
 
 //total clicks var
-var totalClicks = 0;
+var totalClicks = 10;
 
-
+//global arrays
 var allMallItems = [];
+// var newArray = ['Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7', 'Item8', 'Item9', 'Item10', 'Item11', 'Item12', 'Item13', 'Item14', 'Item15', 'Item16', 'Item17', 'Item18', 'Item19', 'Item20'];
 
-function BusMallItems(src, alt, title){
+
+
+function BusMallItems(src, alt, title) {
   this.src = src;
-  this.alit = alt;
+  this.alt = alt;
   this.title = title;
   this.clicked = 0;
   this.viewed = 0;
@@ -21,17 +24,17 @@ function BusMallItems(src, alt, title){
   allMallItems.push(this);
 }
 
-function random(max){
+function random(max) {
   return Math.floor(Math.random() * max);
 }
 
-function imageGenerator(){
+function imageGenerator() {
   var pic1 = random(allMallItems.length);
-  var pic2= random(allMallItems.length);
-  var pic3= random(allMallItems.length);
-  while(pic1 === pic3 || pic2 === pic3 || pic1 === pic2 || pic1 === pic2 === pic3){
+  var pic2 = random(allMallItems.length);
+  var pic3 = random(allMallItems.length);
+  while (pic1 === pic3 || pic2 === pic3 || pic1 === pic2 || pic1 === pic2 === pic3) {
     pic2 = random(allMallItems.length);
-    pic3= random(allMallItems.length);
+    pic3 = random(allMallItems.length);
   }
 
 
@@ -52,27 +55,106 @@ function imageGenerator(){
 }
 
 function handleClick(event) {
-  totalClicks++;
   var clickedItem = event.target.title;
-  for(var i =0; i < allMallItems.length; i++){
-    if(clickedItem === allMallItems[i].title){
+  for (var i = 0; i < allMallItems.length; i++) {
+    if (clickedItem === allMallItems[i].title) {
       allMallItems[i].clickedItem++;
     }
+  }
+  totalClicks++;
+  if(totalClicks ===25){
+    sectionEl.removeEventListener('click', handleClick);
+    newClicksArray();
   }
   imageGenerator();
 }
 
 
-new BusMallItems('img/bag.jpg', 'item1', 'item1');
-new BusMallItems('img/banana.jpg', 'item2', 'item2');
-new BusMallItems('img/bathroom.jpg', 'item3', 'item3');
-new BusMallItems('img/boots.jpg', 'item4', 'item4');
-new BusMallItems('img/breakfast.jpg', 'item5', 'item5');
-new BusMallItems('img/bubblegum.jpg', 'item6', 'item6');
-new BusMallItems('img/chair.jpg', 'item7', 'item7');
-new BusMallItems('img/cthulhu.jpg', 'item8', 'item8');
-new BusMallItems('img/dog-duck.jpg', 'item9', 'item9');
-new BusMallItems('img/dragon.jpg', 'item10', 'item10');
+function newClicksArray(){
+  var name = [];
+  var votes = [];
+  var viewed = [];
+  var colors = [];
+
+  // logic to loop through
+  for(var i = 0; i < allMallItems.length; i++){
+    name.push(allMallItems[i].alt);
+    votes.push(allMallItems[i].clicked);
+    viewed.push(allMallItems[i].viewed);
+  }
+  // add your current index of clicked newClicksArray
+
+  var getDataElement = document.getElementById('itemsData');
+  var ctx = getDataElement.getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: name,
+      datasets: [{
+        label: '# of Votes',
+        data: votes,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+
+// var stringData = JSON.stringify(allMallItems);
+// localStorage.setItem('bsMall', stringData);
+// localStorage.getItem('bsMall');
+// parseData 
+
+
+
+
+
+new BusMallItems('img/bag.jpg', 'item1', 'bag');
+new BusMallItems('img/banana.jpg', 'item2', 'banana');
+new BusMallItems('img/bathroom.jpg', 'item3', 'bathroom');
+new BusMallItems('img/boots.jpg', 'item4', 'boots');
+new BusMallItems('img/breakfast.jpg', 'item5', 'breakfast');
+new BusMallItems('img/bubblegum.jpg', 'item6', 'bubblegum');
+new BusMallItems('img/chair.jpg', 'item7', 'chair');
+new BusMallItems('img/cthulhu.jpg', 'item8', 'cthulhu');
+new BusMallItems('img/dog-duck.jpg', 'item9', 'dogduck');
+new BusMallItems('img/dragon.jpg', 'item10', 'dragon');
 new BusMallItems('img/pen.jpg', 'item11', 'item11');
 new BusMallItems('img/pet-sweep.jpg', 'item12', 'item12');
 new BusMallItems('img/scissors.jpg', 'item13', 'item13');
@@ -89,4 +171,5 @@ new BusMallItems('img/wine-glass.jpg', 'item20', 'item20');
 
 sectionEl.addEventListener('click', handleClick);
 
+newClicksArray();
 imageGenerator();
