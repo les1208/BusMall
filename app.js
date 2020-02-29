@@ -1,27 +1,28 @@
 'use strict';
 
+//global arrays
 var imageOneEl = document.getElementById('picture1');
 var imageTwoEl = document.getElementById('picture2');
 var imageThreeEl = document.getElementById('picture3');
 var sectionEl = document.getElementById('picture-container');
-
-//total clicks var
-var totalClicks = 10;
-
+var sectionEl2 = document.getElementById('list-container');
 //global arrays
+var totalClicks = 25;
 var allMallItems = [];
-// var newArray = ['Item1', 'Item2', 'Item3', 'Item4', 'Item5', 'Item6', 'Item7', 'Item8', 'Item9', 'Item10', 'Item11', 'Item12', 'Item13', 'Item14', 'Item15', 'Item16', 'Item17', 'Item18', 'Item19', 'Item20'];
+var chartData = [];
+var newArr = [];
 
 
-
-function BusMallItems(src, alt, title) {
+function BusMallItems(src, alt, viewed=0, clicked=0) {
   this.src = src;
   this.alt = alt;
-  this.title = title;
-  this.clicked = 0;
-  this.viewed = 0;
+  this.title = alt;
+  this.clicked = clicked;
+  this.viewed = viewed;
 
+  chartData.push(this.title);
   allMallItems.push(this);
+
 }
 
 function random(max) {
@@ -32,7 +33,8 @@ function imageGenerator() {
   var pic1 = random(allMallItems.length);
   var pic2 = random(allMallItems.length);
   var pic3 = random(allMallItems.length);
-  while (pic1 === pic3 || pic2 === pic3 || pic1 === pic2 || pic1 === pic2 === pic3) {
+  while (pic1 === pic2 || pic2 === pic1 || pic3 === pic1 || pic2 === pic3) {
+    pic1 = random(allMallItems.length);
     pic2 = random(allMallItems.length);
     pic3 = random(allMallItems.length);
   }
@@ -55,46 +57,60 @@ function imageGenerator() {
 }
 
 function handleClick(event) {
-  var clickedItem = event.target.title;
+  var clickedImg = event.target.title;
+  totalClicks--;
   for (var i = 0; i < allMallItems.length; i++) {
-    if (clickedItem === allMallItems[i].title) {
-      allMallItems[i].clickedItem++;
+    if (clickedImg === allMallItems[i].title) {
+      allMallItems[i].clicked++;
     }
   }
-  totalClicks++;
-  if(totalClicks ===25){
+
+  if (totalClicks > 0) {
+    imageGenerator();
+  } else {
     sectionEl.removeEventListener('click', handleClick);
-    newClicksArray();
+    sectionEl.style.display = 'none';
+    toLocalStorage();
+    clickList();
+    addChartData();
+    renderChart();
+
+
   }
-  imageGenerator();
+}
+
+function toLocalStorage() {
+  var stringData = JSON.stringify(allMallItems);
+  localStorage.setItem('swBsItems', stringData);
+}
+
+function clickList() {
+  for (var i = 0; i < allMallItems.length; i++) {
+    var liEl = document.createElement('li');
+    liEl.textContent = allMallItems[i].title + ' has ' + allMallItems[i].clicked + ' votes in ' + allMallItems[i].viewed + ' views ';
+    sectionEl2.appendChild(liEl);
+  }
+}
+
+function addChartData() {
+  for (var i = 0; i < allMallItems.length; i++) {
+    newArr.push(allMallItems[i].clicked);
+  }
 }
 
 
-function newClicksArray(){
-  var name = [];
-  var votes = [];
-  var viewed = [];
-  var colors = [];
 
-  // logic to loop through
-  for(var i = 0; i < allMallItems.length; i++){
-    name.push(allMallItems[i].alt);
-    votes.push(allMallItems[i].clicked);
-    viewed.push(allMallItems[i].viewed);
-  }
-  // add your current index of clicked newClicksArray
-
-  var getDataElement = document.getElementById('itemsData');
-  var ctx = getDataElement.getContext('2d');
-  new Chart(ctx, {
+function renderChart() {
+  var ctx = document.getElementById('my_data');
+  var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: name,
+      labels: chartData,
       datasets: [{
         label: '# of Votes',
-        data: votes,
+        data: newArr,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
+          'rgba(254, 98, 131, 0.2)',
           'rgba(54, 162, 235, 0.2)',
           'rgba(255, 206, 86, 0.2)',
           'rgba(75, 192, 192, 0.2)',
@@ -136,40 +152,45 @@ function newClicksArray(){
   });
 }
 
-// var stringData = JSON.stringify(allMallItems);
-// localStorage.setItem('bsMall', stringData);
-// localStorage.getItem('bsMall');
-// parseData 
+function populateData() {
+  if (localStorage.getItem('swBsItems')) {
+    console.log('No local storage');
+    var allStoredItems = JSON.parse(localStorage.getItem('swBsItems'));
+    console.log(allStoredItems);
+    for (var i = 0; i < allStoredItems.length; i++) {
+      new BusMallItems(
+        allStoredItems[i].src,
+        allStoredItems[i].alt,
+        allStoredItems[i].viewed,
+        allStoredItems[i].clicked)
 
+    }
+  } else {
+    new BusMallItems('img/bag.jpg', 'item1', 'bag');
+    new BusMallItems('img/banana.jpg', 'item2', 'banana');
+    new BusMallItems('img/bathroom.jpg', 'item3', 'bathroom');
+    new BusMallItems('img/boots.jpg', 'item4', 'boots');
+    new BusMallItems('img/breakfast.jpg', 'item5', 'breakfast');
+    new BusMallItems('img/bubblegum.jpg', 'item6', 'bubblegum');
+    new BusMallItems('img/chair.jpg', 'item7', 'chair');
+    new BusMallItems('img/cthulhu.jpg', 'item8', 'cthulhu');
+    new BusMallItems('img/dog-duck.jpg', 'item9', 'dogduck');
+    new BusMallItems('img/dragon.jpg', 'item10', 'dragon');
+    new BusMallItems('img/pen.jpg', 'item11', 'item11');
+    new BusMallItems('img/pet-sweep.jpg', 'item12', 'item12');
+    new BusMallItems('img/scissors.jpg', 'item13', 'item13');
+    new BusMallItems('img/shark.jpg', 'item14', 'item14');
+    new BusMallItems('img/sweep.jpg', 'item15', 'item15');
+    new BusMallItems('img/tauntaun.jpg', 'item16', 'item16');
+    new BusMallItems('img/unicorn.jpg', 'item17', 'item17');
+    new BusMallItems('img/usb.jpg', 'item18', 'item18');
+    new BusMallItems('img/water-can.jpg', 'item19', 'item19');
+    new BusMallItems('img/wine-glass.jpg', 'item20', 'item20');
 
-
-
-
-new BusMallItems('img/bag.jpg', 'item1', 'bag');
-new BusMallItems('img/banana.jpg', 'item2', 'banana');
-new BusMallItems('img/bathroom.jpg', 'item3', 'bathroom');
-new BusMallItems('img/boots.jpg', 'item4', 'boots');
-new BusMallItems('img/breakfast.jpg', 'item5', 'breakfast');
-new BusMallItems('img/bubblegum.jpg', 'item6', 'bubblegum');
-new BusMallItems('img/chair.jpg', 'item7', 'chair');
-new BusMallItems('img/cthulhu.jpg', 'item8', 'cthulhu');
-new BusMallItems('img/dog-duck.jpg', 'item9', 'dogduck');
-new BusMallItems('img/dragon.jpg', 'item10', 'dragon');
-new BusMallItems('img/pen.jpg', 'item11', 'item11');
-new BusMallItems('img/pet-sweep.jpg', 'item12', 'item12');
-new BusMallItems('img/scissors.jpg', 'item13', 'item13');
-new BusMallItems('img/shark.jpg', 'item14', 'item14');
-new BusMallItems('img/sweep.jpg', 'item15', 'item15');
-new BusMallItems('img/tauntaun.jpg', 'item16', 'item16');
-new BusMallItems('img/unicorn.jpg', 'item17', 'item17');
-new BusMallItems('img/usb.jpg', 'item18', 'item18');
-new BusMallItems('img/water-can.jpg', 'item19', 'item19');
-new BusMallItems('img/wine-glass.jpg', 'item20', 'item20');
-
-
-
+  }
+}
 
 sectionEl.addEventListener('click', handleClick);
 
-newClicksArray();
+populateData();
 imageGenerator();
