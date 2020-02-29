@@ -1,28 +1,42 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<link rel="stylesheet" type="text/css" href="reset.css">
-		<link rel="stylesheet" tyoe="text/css" href="style.css">
-	</head>
-	<body>
-		<header> <img id="bus" src="img/bus.png" width="90%"> Bus Mall</header>
 
-		<main>
+<head>
+	<link rel="stylesheet" type="text/css" href="reset.css">
+	<link rel="stylesheet" tyoe="text/css" href="style.css">
+</head>
+
+<body>
+	<header> <img id="bus" src="img/bus.png" width="90%"> Bus Mall</header>
+
+	<main>
+
+		<p id="text"> Welcome to BusMall, a catalog of assorted high-markup products provided to a captive audience seeking
+			a mental escape from the drudgery of travel. Above you will see a variety of images that once you click on them
+			new ones appear. Please take a moment to vote on the top three you like, so we can help get those products on our
+			catalog. Thank you for your time and may the voting be ever in your favor! </p>
 
 	
-			<section id="picture-container">
-				<img id="picture1" alt="item1" title="" src="">
-				<img id="picture2" alt="item2" title="" src="">
-				<img id="picture3" alt="item3" title="" src="">
-		
-			</section>
+		<section id="picture-container">	
+			<h1>Click and Vote</h1>
+			<img id="picture1" alt="item1" title="" src="">
+			<img id="picture2" alt="item2" title="" src="">
+			<img id="picture3" alt="item3" title="" src="">
 
-			<p id="text">  Welcome to BusMall, a catalog of assorted high-markup products provided to a captive audience seeking a mental escape from the drudgery of travel. Above you will see a variety of images that once you click on them new ones appear. Please take a moment to vote on the top three you like, so we can help get those products on our catalog. Thank you for your time and may the voting be ever in your favor! </p>
-			<canvas id="itemsData"> 
-			</canvas>
-		</main>
-		<footer></footer>
-		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-		<script src="app.js"></script>
-	</body>
+		</section>
+
+		<section id='list-container'></section>
+		<canvas id="my_data"></canvas>
+
+	
+
+
+	</main>
+	<footer></footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+	<script src="app.js"> </script>
+
+</body>
+
 </html>

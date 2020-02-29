@@ -12,3 +12,7 @@
 ## 02/20/2020
 - As a user, I would like to track how many times a product has appeared in a voting session, so that I can track analytics on each piece of data.
 - As a marketing manager, I would like a visual representation of how many times a product was clicked so that I can visually analyze the results.
+
+## 02/29/2020
+
+- As a user, I would like my data to persistently track totals between page refreshes, so that I can keep track of the aggregate number of votes.
